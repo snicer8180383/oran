@@ -12,6 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- CSS
             ================================================== -->
+        <link rel="stylesheet" href="{{asset('/css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{asset('/css/base.css')}}">
         <link rel="stylesheet" href="{{asset('/css/vendor.css')}}">
         <link rel="stylesheet" href="{{asset('/css/main.css')}}">
@@ -24,6 +25,8 @@
             ================================================== -->
         <link rel="shortcut icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
         <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
+
+        @yield('styles')
     </head>
     <body id="top">
         
@@ -46,7 +49,8 @@
         </div>
         <!-- Java Script
             ================================================== -->
-        <script src="{{asset('/js/jquery-3.2.1.min.js')}}"></script>
+        <script src="{{asset('/js/jquery-3.6.0.min.js')}}"></script>
+        <script src="{{asset('/js/bootstrap.js')}}"></script>
         <script src="{{asset('/js/plugins.js')}}"></script>
         <script src="{{asset('/js/main.js')}}"></script>
         @yield('javascript')

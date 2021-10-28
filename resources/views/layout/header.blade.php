@@ -2,7 +2,14 @@
     ================================================== -->
     <header class="s-header">
     <div class="header-logo">
-        <a class="site-logo" href="index.html">
+                @php
+                $request = \Request::getRequestUri();
+                @endphp
+                @if($request == '/')
+                    <a class="site-logo" href="#">
+                @else
+                    <a class="site-logo" href="{{url('/')}}">
+                @endif
             <img src="{{asset('/images/logo.png')}}" alt="Homepage">
         </a>
     </div>
@@ -10,9 +17,6 @@
         <a href="#0" class="header-nav__close" title="close"><span>Close</span></a>
         <div class="header-nav__content">
             <ul class="header-nav__list">
-                @php
-                $request = \Request::getRequestUri();
-                @endphp
                 @if($request == '/')
                     <li class="current"><a class="smoothscroll" href="#home" title="home">Home</a></li>
                     <li><a class="smoothscroll" href="#about" title="about">About</a></li>
