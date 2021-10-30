@@ -49,6 +49,7 @@
         </div>
         <!-- Java Script
             ================================================== -->
+        <script src="https://kit.fontawesome.com/b3043a0e00.js" crossorigin="anonymous"></script>
         <script src="{{asset('/js/jquery-3.6.0.min.js')}}"></script>
         <script src="{{asset('/js/bootstrap.js')}}"></script>
         <script src="{{asset('/js/plugins.js')}}"></script>

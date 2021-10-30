@@ -6,8 +6,14 @@
         "imagem": "box_studios/baixo.jpg"
     },
     "2":{
-        "nome": "Box Studios",
-        "work": "Branding",
+        "nome": "Box Studios 2",
+        "work": "Rebranding",
+        "logo": "box_studios/foto2.jpg",
+        "imagem": "box_studios/baixo.jpg"
+    },
+    "3":{
+        "nome": "Box Studios 3",
+        "work": "Rebranding",
         "logo": "box_studios/foto2.jpg",
         "imagem": "box_studios/baixo.jpg"
     }

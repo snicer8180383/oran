@@ -5,9 +5,7 @@
 @section('styles')
     <style>
         .Projects-cover-1nk {
-            margin-left: auto;
-            margin-right: auto;
-            max-width: 404px;
+            margin: 0 20px !important;
         }
         .ProjectCover-root-1aD .ProjectCover-cover-iX9.ProjectCover-cover-iX9 {
             max-width: initial;
@@ -151,11 +149,6 @@
             cursor: pointer;
             text-decoration: none;
         }
-        .projects{
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        }
         .project-item{
             padding:10px !important;
             margin:0 10px;
@@ -185,11 +178,14 @@
         .modal-backdrop{
             opacity:0.8 !important;
         }
+        /*
+        --------Arrows--------
+        */
         .arrow-before{
             bottom:0;
             right:0;
             position:fixed;
-            margin-right:68%;
+            margin-right:82%;
             z-index: 99999;
             color:#fff;
             margin-bottom:25px;
@@ -205,7 +201,7 @@
             bottom:0;
             left:0;
             position:fixed;
-            margin-left:67.5%;
+            margin-left:81%;
             z-index: 99999;
             color:#fff;
             margin-bottom:25px;
@@ -216,6 +212,53 @@
             border-radius: 50%;
             box-shadow: 0px 0px 2px #888;
             padding: 0.4em 0.6em 0.4em 0.7em;
+        }
+        @media only screen and (min-width: 2070px){
+            .arrow-before{
+                margin-right:72%;
+            }
+            .arrow-after{
+                margin-left:72%;
+            }
+        }
+        @media only screen and (min-width: 1446px) and (max-width: 2069px){
+            .arrow-before{
+                margin-right:79%;
+            }
+            .arrow-after{
+                margin-left:79%;
+            }
+        }
+        @media only screen and (max-width: 1200px){
+            .arrow-before{
+                margin-right:93%;
+            }
+            .arrow-after{
+                margin-left:93.5%;
+            }
+        }
+        @media only screen and (max-width: 768px){
+            .arrow-before{
+                margin-right:90%;
+            }
+            .arrow-after{
+                margin-left:90.5%;
+            }
+        }
+        @media only screen and (max-width: 767px){
+            .arrow-before{
+                display:none;
+            }
+            .arrow-after{
+                display:none;
+            }
+        }
+        .modal-body{
+            text-align:center;
+        }
+        #loading-icon{
+            margin-top:40%;
+            color:#FF7300;
         }
     </style>
 @endsection
@@ -278,7 +321,7 @@
         </div> <!-- end section-header -->
         <div class="row projects" style="width:100%;max-width:100%;">
             @foreach($projects as $key => $proj)
-                <div class="col-md-3 project-item" data-aos="fade-up" onclick="project({{ $key }})">
+                <div class="col-md-3 col-sm-12 col-xs-12" data-aos="fade-up" onclick="project({{ $key }})">
                     <div class="ProjectCover-root-1aD Projects-cover-1nk">
                         <div class="ProjectCoverNeue-root-2lV ProjectCover-cover-iX9">
                             <div class="Cover-cover-2mr ProjectCoverNeue-loaded-KKQ">
@@ -411,7 +454,8 @@
                     <button type="button" class="btn-close" onclick="$('#project1').modal('hide');"></button>
                 </div>
                 <div class="modal-body">
-                    <img src="{{asset('/images/projects/box_studios/baixo.jpg')}}" alt="" id="imgModal">
+                    <i class="fas fa-circle-notch fa-spin fa-3x" id="loading-icon"></i>
+                    <img src="" alt="" id="imgModal">
                 </div>
             </div>
         </div>
@@ -421,17 +465,113 @@
 
 @section('javascript')
     <script>
+        var projectModal = 0;
+        var urlImages = "{{asset('/images/projects')}}";
+        var projects = <?=json_encode($projects)?>;
+        $('#loading-icon').hide();
         function project(id){
-            $('#project'+id).modal("show");
+            projectModal = id;
+            $('#imgModal').attr('src', urlImages+'/'+projects[projectModal].imagem);
+            $('.modal-title').html(projects[projectModal].nome);
+            $('#project'+projectModal).modal("show");
         }
-        $('#imgModal').onclick(function(){
+        function nextProject(){
+            if((projectModal+1) > Object.keys(projects).length){
+
+            }else{
+                projectModal = projectModal+1;
+                $('#imgModal').hide();
+                $('#loading-icon').show();
+                setTimeout(function(){ 
+                    $('#imgModal').show();
+                    $('#loading-icon').hide();
+                }, 500);
+                $('#imgModal').attr('src', urlImages+'/'+projects[projectModal].imagem);
+                $('.modal-title').html(projects[projectModal].nome);
+            }
+        }
+
+        function previousProject(){
+            if((projectModal-1) == 0){
+
+            }else{
+                projectModal = projectModal-1; 
+                $('#imgModal').hide();
+                $('#loading-icon').show();
+                setTimeout(function(){ 
+                    $('#imgModal').show();
+                    $('#loading-icon').hide();
+                }, 500);
+                $('#imgModal').attr('src', urlImages+'/'+projects[projectModal].imagem);
+                $('.modal-title').html(projects[projectModal].nome);
+            }
+        }
+        
+        $('#imgModal').mouseenter(function(){
+            $(this).css('cursor','zoom-in');
+        });
+        $('#imgModal').click(function(){
             if($('.modal-dialog').hasClass('modal-lg')){
                 $('.modal-dialog').removeClass('modal-lg');
                 $('.modal-dialog').addClass('modal-fullscreen');
+                $('.arrow-before').hide();
+                $('.arrow-after').hide();
+                $(this).css('cursor','zoom-out');
             }else{
                 $('.modal-dialog').removeClass('modal-fullscreen');
                 $('.modal-dialog').addClass('modal-lg');
+                $('.arrow-before').show();
+                $('.arrow-after').show();
+                $(this).css('cursor','zoom-in');
             }
         });
+        $('.arrow-before').click(function(){
+            previousProject();
+        });
+        $('.arrow-after').click(function(){
+            nextProject();
+        });
+        document.addEventListener('touchstart', handleTouchStart, false);        
+        document.addEventListener('touchmove', handleTouchMove, false);
+
+        var xDown = null;                                                        
+        var yDown = null;
+
+        function getTouches(evt) {
+        return evt.touches ||             // browser API
+                evt.originalEvent.touches; // jQuery
+        }                                                     
+                                                                                
+        function handleTouchStart(evt) {
+            const firstTouch = getTouches(evt)[0];                                      
+            xDown = firstTouch.clientX;                                      
+            yDown = firstTouch.clientY;                                      
+        };                                                
+                                                                                
+        function handleTouchMove(evt) {
+            if ( ! xDown || ! yDown ) {
+                return;
+            }
+
+            var xUp = evt.touches[0].clientX;                                    
+            var yUp = evt.touches[0].clientY;
+
+            var xDiff = xDown - xUp;
+            var yDiff = yDown - yUp;
+                                                                                
+            if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+                if ( xDiff > 0 ) {
+                    /* right swipe */
+                    nextProject();
+                } else {
+                    /* left swipe */
+                    previousProject();
+                }                       
+            } else {                                                        
+            }
+            /* reset values */
+            xDown = null;
+            yDown = null;                                             
+        };
     </script>
 @endsection
